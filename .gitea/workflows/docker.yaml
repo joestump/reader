@@ -9,11 +9,11 @@ jobs:
   docker:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        arch:
-          - linux/amd64
-          - linux/arm64
+      #    strategy:
+      #      matrix:
+      #        arch:
+      #          - linux/amd64
+      #          - linux/arm64
 
     steps:
       - name: Checkout
@@ -42,10 +42,13 @@ jobs:
           username: ${{ gitea.repository_owner }}
           password: ${{ secrets.GIT_AUTH_TOKEN }}
       - name: Build and push
-          platforms: ${{ matrix.arch }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          github-token: ${{ secrets.GIT_AUTH_TOKEN }}
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GIT_AUTH_TOKEN }}
+        #        platforms: ${{ matrix.arch }}
+        platforms:
+          - linux/amd64
+          - linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        github-token: ${{ secrets.GIT_AUTH_TOKEN }}
+        secrets: |
+          GIT_AUTH_TOKEN=${{ secrets.GIT_AUTH_TOKEN }}
