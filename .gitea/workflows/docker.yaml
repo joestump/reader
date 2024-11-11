@@ -8,6 +8,13 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        arch:
+          - linux/amd64
+          - linux/arm64
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,7 +42,7 @@ jobs:
           username: ${{ gitea.repository_owner }}
           password: ${{ secrets.GIT_AUTH_TOKEN }}
       - name: Build and push
-          platforms: 'linux/amd64,linux/arm64'
+          platforms: ${{ matrix.arch }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
