@@ -35,7 +35,7 @@ jobs:
           username: ${{ gitea.repository_owner }}
           password: ${{ secrets.GIT_AUTH_TOKEN }}
       - name: Build and push
-          context: ${{ gitea.workspace }}
+          context: ${{ gitea.workspace }}/
           file: ${{ gitea.workspace }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
