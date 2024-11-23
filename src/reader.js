@@ -4,6 +4,7 @@ import {JSDOM} from "jsdom";
 import {marked} from "marked";
 import fs from "node:fs";
 import { URL } from "node:url";
+import https from 'node:https';
 
 import Parser from "@postlight/parser";
 
@@ -17,17 +18,24 @@ const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window);
 
 export async function generateReaderView(url) {
-  const res = await Parser.parse(url, {contentType: "markdown"});
+  const res = await Parser.parse(url, {
+    contentType: "markdown"
+  });
   const domain = res.domain.replace("www.", "");
   const md = PROXY_IMAGES
     ? marked.use({
         renderer: {
-          image(href, title, text) {
-            const imageUrl = new URL(href, res.url).toString();
-            return `<img
-                    src="/__/proxy?href=${encodeURIComponent(imageUrl)}"
-                    alt="${text}"${title ? `\ntitle="${title}"` : ""}
-                />`;
+          image(attrs) {
+            try {
+              const imageUrl = new URL(attrs.href);                
+              return `<img
+                      src="/__/proxy?href=${encodeURIComponent(imageUrl)}"
+                      alt="${attrs.text}"${attrs.title ? `\ntitle="${attrs.title}"` : ""}
+                  />`;
+            } catch (error) {
+              console.error('Failed to parse image URL:', href, error);
+              return ''; // Skip invalid images
+            }
           },
         },
       })
