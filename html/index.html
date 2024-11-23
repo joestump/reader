@@ -66,9 +66,61 @@
       .mdi {
         font-size: 1.2rem;
       }
+
+      .bookmarklet-container {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .bookmarklet {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(155, 77, 202, 0.15);
+        color: #9b8cb0;
+        text-decoration: none;
+        border-radius: 1.5rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: move;
+        transition: all 0.2s ease;
+      }
+
+      .bookmarklet:hover {
+        background: rgba(155, 77, 202, 0.25);
+        transform: translateY(-1px);
+      }
+
+      .bookmarklet i {
+        font-size: 1rem;
+      }
+
+      .bookmarklet-description {
+        font-size: 0.7rem;
+        color: #9b8cb0;
+        opacity: 0.7;
+        line-height: 1.2;
+        width: 300px;
+        text-align: left;
+      }
     </style>
   </head>
   <body>
+    <div class="bookmarklet-container">
+      <a class="bookmarklet" href="javascript:(function(){window.location='{{baseUrl}}/?url='+encodeURIComponent(window.location.href)})();">
+        Sanitize
+        <i class="mdi mdi-bookmark-plus"></i>
+      </a>
+      <div class="bookmarklet-description">
+        ↑ Drag this bookmarklet to your bookmarks bar to sanitize any URL with one click
+      </div>
+    </div>
+
     <form action="/" method="get" class="url-form">
       <div class="input-group">
         <input 

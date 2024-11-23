@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import fs from "node:fs";
+import Handlebars from "handlebars";
 import process from 'node:process';
 
 import {extensions, imageProxy} from "./image-proxy.js";
@@ -7,16 +8,23 @@ import {generateReaderView} from "./reader.js";
 import {PORT, HOST} from "./constants.js";
 
 const fastify = Fastify({logger: true});
-const INDEX_HTML = fs.readFileSync("html/index.html").toString();
+const INDEX_TEMPLATE = Handlebars.compile(fs.readFileSync("html/index.html").toString());
 
-fastify.get("/", async ({query}, res) => {
-  const {url} = query;
+fastify.get("/", async (request, reply) => {
+  const {url} = request.query;
 
   if (url) {
     const result = await generateReaderView(url);
-    return res.type("text/html").send(result);
+    return reply.type("text/html").send(result);
   }
-  res.type("text/html").send(INDEX_HTML);
+
+  const protocol = request.protocol;
+  const host = request.headers.host;
+  const baseUrl = `${protocol}://${host}`;
+  
+  const html = INDEX_TEMPLATE({ baseUrl });
+  
+  reply.type("text/html").send(html);
 });
 
 fastify.get("/__/proxy", async (request, res) => {
