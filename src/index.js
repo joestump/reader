@@ -1,8 +1,10 @@
 import Fastify from "fastify";
 import fs from "node:fs";
+import process from 'node:process';
 
 import {extensions, imageProxy} from "./image-proxy.js";
 import {generateReaderView} from "./reader.js";
+import {PORT, HOST} from "./constants.js";
 
 const fastify = Fastify({logger: true});
 const INDEX_HTML = fs.readFileSync("html/index.html").toString();
@@ -37,7 +39,7 @@ fastify.get("*", async (request, res) => {
 
 // Run the server
 fastify.listen(
-  {port: process.env.PORT || 8080, host: "0.0.0.0"},
+  {port: PORT, host: HOST},
   (err, address) => {
     if (err) {
       console.error(err);
@@ -50,4 +52,14 @@ fastify.addHook("onError", (request, reply, error, done) => {
   // Some code
   console.log(error);
   done();
+});
+
+process.on('SIGTERM', async () => {
+  await fastify.close();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  await fastify.close();
+  process.exit(0);
 });

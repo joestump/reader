@@ -3,6 +3,7 @@ import Handlebars from "handlebars";
 import {JSDOM} from "jsdom";
 import {marked} from "marked";
 import fs from "node:fs";
+import { URL } from "node:url";
 
 import Parser from "@postlight/parser";
 
@@ -22,10 +23,9 @@ export async function generateReaderView(url) {
     ? marked.use({
         renderer: {
           image(href, title, text) {
+            const imageUrl = new URL(href, res.url).toString();
             return `<img
-                    src="/__/proxy?href=${encodeURIComponent(
-                      new URL(href, res.url)
-                    )}"
+                    src="/__/proxy?href=${encodeURIComponent(imageUrl)}"
                     alt="${text}"${title ? `\ntitle="${title}"` : ""}
                 />`;
           },

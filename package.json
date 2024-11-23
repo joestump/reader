@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon",
     "start": "node src/index.js"
   },
   "type": "module",
@@ -13,11 +14,15 @@
   "license": "ISC",
   "dependencies": {
     "@postlight/parser": "^2.2.3",
-    "dompurify": "^3.0.6",
-    "fastify": "^4.24.3",
+    "css-select": "^5.1.0",
+    "dompurify": "^3.2.0",
+    "fastify": "^5.1.0",
     "handlebars": "^4.7.8",
-    "jsdom": "^23.0.0",
-    "marked": "^11.0.0",
-    "sharp": "^0.33.0"
+    "jsdom": "^25.0.1",
+    "marked": "^15.0.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }

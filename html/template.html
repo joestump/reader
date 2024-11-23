@@ -1,193 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="auto">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{title}}</title>
     <link rel="shortcut icon" href="{{favicon}}" type="image/x-icon" />
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
     <style>
+      :root:not([data-theme="dark"]) {
+        --background-color: #faf6f1;
+        --color: #2d2d2d;
+        --primary: #6b5b95;
+        --primary-hover: #563d7c;
+        --card-background-color: #fff;
+        --card-border-color: #eae3d9;
+      }
+
+      [data-theme="dark"] {
+        --background-color: #1a1818;
+        --color: #e1d9d1;
+        --primary: #9b8cb0;
+        --primary-hover: #7c6992;
+        --card-background-color: #242222;
+        --card-border-color: #2d2929;
+      }
+
       body {
-        color: #333;
-        font-family: serif;
-        line-height: 1.5;
+        font-family: "Crimson Pro", Georgia, serif;
+        line-height: 1.7;
+        max-width: 45rem;
         margin: 0 auto;
-        max-width: 40em;
-        padding: 0 1em;
+        padding: 1rem 0.8rem;
       }
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        margin: 1.25em 0 0.5em;
-        line-height: 1.2;
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: "Spectral", Georgia, serif;
+        font-weight: 600;
       }
-      a:link {
-        color: #00e;
-      }
-      a:visited {
-        color: #518;
-      }
-      a:focus,
-      a:hover {
-        color: #03f;
-      }
-      a:active {
-        color: #e00;
-      }
-      h1 a:empty:before,
-      h2 a:empty:before,
-      h3 a:empty:before,
-      h4 a:empty:before,
-      h5 a:empty:before,
-      h6 a:empty:before {
-        content: "#";
-      }
-      h1 a:empty,
-      h2 a:empty,
-      h3 a:empty,
-      h4 a:empty,
-      h5 a:empty,
-      h6 a:empty {
-        visibility: hidden;
-        padding-left: 0.25em;
-      }
-      h1:hover a:empty,
-      h2:hover a:empty,
-      h3:hover a:empty,
-      h4:hover a:empty,
-      h5:hover a:empty,
-      h6:hover a:empty {
-        visibility: visible;
-      }
-      img {
-        max-width: 100%;
-      }
-      figure {
-        margin: 1em 0;
-        text-align: center;
-      }
-      figcaption {
-        font-size: small;
-      }
-      code,
-      kbd,
-      pre,
-      samp {
-        font-family: monospace, monospace;
-      }
-      code,
-      kbd,
-      pre {
-        color: #050;
-      }
-      samp {
-        color: #730;
-      }
-      blockquote,
-      pre {
-        background: #eee;
-        padding: 0.5em;
-      }
-      pre {
-        overflow: auto;
-      }
-      blockquote {
-        border-left: medium solid #ccc;
-        margin: 1em 0;
-      }
-      blockquote :first-child {
-        margin-top: 0;
-      }
-      blockquote :last-child {
-        margin-bottom: 0;
-      }
-      table {
-        border-collapse: collapse;
-      }
-      td,
-      th {
-        border: thin solid #999;
-        padding: 0.3em 0.4em;
-        text-align: left;
-      }
-      @media (prefers-color-scheme: dark) {
-        body {
-          background: #111;
-          color: #bbb;
-        }
-        a:link {
-          color: #9bf;
-        }
-        a:visited {
-          color: #caf;
-        }
-        a:focus,
-        a:hover {
-          color: #9cf;
-        }
-        a:active {
-          color: #f99;
-        }
-        code,
-        kbd,
-        pre {
-          color: #9c6;
-          font-family: monospace, monospace;
-        }
-        samp {
-          color: #db0;
-        }
-        blockquote,
-        pre {
-          background: #000;
-        }
-        blockquote {
-          border-color: #333;
-        }
-        td,
-        th {
-          border-color: #666;
-        }
-      }
-      a[link] {
+
+      .theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        background: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: 2rem;
+        padding: 0.5rem 1rem;
+        width: auto;
+        min-width: unset;
+        cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 4px;
-        text-decoration: none;
-        font-family: sans-serif;
-        color: #a9a5a5;
+        gap: 0.5rem;
+        font-size: 1.2rem;
+        color: var(--color);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
+
+      .theme-toggle i {
+        color: var(--primary);
+      }
+
+      .article-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin: 0.5rem 0 0.075rem;
+        color: var(--primary);
+      }
+
+      a[link] {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+      }
+
       [link] img {
         height: 16px;
         width: 16px;
+        border-radius: 2px;
       }
+
       main {
-        margin-top: 4rem;
+        margin: 0;
+        padding: 0;
+        --block-spacing-vertical: 0;
+      }
+
+      main > a[link] {
+        margin-top: 1rem;
+        display: inline-flex;
+      }
+
+      h1 {
+        margin: 0.5rem 0;
+        line-height: 1.2;
+      }
+
+      article {
+        margin-top: 0.1rem;
+      }
+
+      blockquote {
+        border-left: 3px solid var(--primary);
+        padding-left: 1rem;
+        font-style: italic;
+        color: var(--color);
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      pre {
+        border-radius: 4px;
+        padding: 1rem;
       }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Spectral:wght@600&display=swap" rel="stylesheet">
     <meta name="site-root" content="{{root}}" />
   </head>
   <body>
+    <button class="theme-toggle" aria-label="Toggle theme">
+      <i class="mdi mdi-weather-sunny" data-light-icon></i>
+      <i class="mdi mdi-weather-night" data-dark-icon style="display: none;"></i>
+    </button>
+
     <main>
-      <a link href="{{url}}"
-        ><img id="fav" src="{{root}}/favicon.ico" />{{domain}}</a
-      >
+      <a link href="{{url}}">
+        <img id="fav" src="{{root}}/favicon.ico" alt="Site favicon"/>
+        {{domain}}
+      </a>
       <h1>{{title}}</h1>
-      {{#if author}}
-      <cite>By {{author}}</cite>
-      {{/if}}
-      <time>{{date_published}}</time>
+      <div class="article-meta">
+        {{#if author}}
+        <cite>By {{author}}</cite>
+        {{/if}}
+        <time>{{date_published}}</time>
+      </div>
     </main>
-    <div>{{{content}}}</div>
+
+    <article>
+      {{{content}}}
+    </article>
+
     <script>
       (function () {
+        // Favicon fallback
         const img = document.querySelector("#fav");
         img.addEventListener("error", () => {
           img.src = document
             .querySelector('link[rel="shortcut icon"]')
             .getAttribute("href");
+        });
+
+        // Theme toggle
+        const html = document.documentElement;
+        const themeToggle = document.querySelector('.theme-toggle');
+        const lightIcon = document.querySelector('[data-light-icon]');
+        const darkIcon = document.querySelector('[data-dark-icon]');
+
+        function updateTheme(isDark) {
+          html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+          lightIcon.style.display = isDark ? 'none' : 'block';
+          darkIcon.style.display = isDark ? 'block' : 'none';
+        }
+
+        themeToggle.addEventListener('click', () => {
+          const isDark = html.getAttribute('data-theme') === 'dark';
+          updateTheme(!isDark);
         });
       })();
     </script>

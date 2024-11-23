@@ -8,4 +8,4 @@ RUN npm i
 
 ENTRYPOINT [  ]
 
-CMD [ "node", "src/index.js" ]
+CMD [ "npm", "start" ]
