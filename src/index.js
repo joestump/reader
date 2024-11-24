@@ -7,7 +7,7 @@ import Handlebars from "handlebars";
 import process from 'node:process';
 
 import {extensions, imageProxy} from "./image-proxy.js";
-import {generateReaderView} from "./reader.js";
+import {convertUrlToReader, generateReaderView} from "./reader.js";
 import {PORT, HOST} from "./constants.js";
 
 const fastify = Fastify({logger: true});
@@ -46,6 +46,17 @@ fastify.get("/__/proxy", async (request, res) => {
     .send(buf);
 });
 fastify.get("/favicon.ico", (_, res) => res.send(""));
+fastify.get("/content.json", async (request, reply) => {
+  const {url} = request.query;
+  
+  if (!url) {
+    return reply.code(400).send({ error: "URL parameter is required" });
+  }
+  
+  const result = await convertUrlToReader(url);
+  const {ctx, ...cleanResult} = result;
+  return reply.type("application/json").send(cleanResult);
+});
 fastify.get("*", async (request, res) => {
   const url = request.url.substring(1);
   const result = await generateReaderView(url);

@@ -47,6 +47,7 @@ export async function convertUrlToReader(url) {
     domain,
     root: `https://${res.domain}`,
     content: DOMPurify.sanitize(md.parse(res.content)),
+    markdown: res.content,
     date_published: res.date_published
       ? new Date(res.date_published).toDateString()
       : "",
