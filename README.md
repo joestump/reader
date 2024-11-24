@@ -79,6 +79,10 @@ Returns a parsed version of the article in JSON format.
 
 #### Example Request
 
+```bash
+curl -s "http://localhost:8080/content.json?url=http://vimeo.com/8708708" | jq
+```
+
 ## 🛠️ Development
 
 - `npm i`
