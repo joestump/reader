@@ -5,6 +5,8 @@ import Fastify from "fastify";
 import fs from "node:fs";
 import Handlebars from "handlebars";
 import process from 'node:process';
+import swagger from '@fastify/swagger';
+import swaggerUi from '@fastify/swagger-ui';
 
 import {extensions, imageProxy} from "./image-proxy.js";
 import {convertUrlToReader, generateReaderView} from "./reader.js";
@@ -21,6 +23,70 @@ Handlebars.registerPartial("base", baseTemplate);
 Handlebars.registerHelper('json', function(context) {
   return JSON.stringify(context, null, 2);
 });
+
+// Register Swagger
+await fastify.register(swagger, {
+  swagger: {
+    info: {
+      title: 'Reader API',
+      description: 'API for converting URLs to reader-friendly content',
+      version: '1.0.0'
+    },
+    schemes: ['http', 'https'],
+    consumes: ['application/json'],
+    produces: ['application/json'],
+  },
+  hideUntagged: true
+});
+
+// Register Swagger UI
+await fastify.register(swaggerUi, {
+  routePrefix: '/docs',
+  uiConfig: {
+    docExpansion: 'full',
+    deepLinking: false
+  }
+});
+
+// Define the schema for the endpoint
+const contentSchema = {
+  schema: {
+    tags: ['content'],
+    description: 'Convert URL to reader-friendly content',
+    querystring: {
+      type: 'object',
+      required: ['url'],
+      properties: {
+        url: { type: 'string', format: 'uri', description: 'URL to convert' }
+      }
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+          content: { type: 'string' },
+          markdown: { type: 'string' },
+          domain: { type: 'string' },
+          root: { type: 'string' },
+          date_published: { type: 'string' },
+          favicon: { type: 'string' },
+          oembed_data: { 
+            type: 'object',
+            additionalProperties: true,
+            description: 'Raw oEmbed data if available'
+          }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' }
+        }
+      }
+    }
+  }
+};
 
 fastify.get("/", async (request, reply) => {
   const {url} = request.query;
@@ -51,7 +117,7 @@ fastify.get("/__/proxy", async (request, res) => {
     .send(buf);
 });
 fastify.get("/favicon.ico", (_, res) => res.send(""));
-fastify.get("/content.json", async (request, reply) => {
+fastify.get("/content.json", contentSchema, async (request, reply) => {
   const {url} = request.query;
   
   if (!url) {

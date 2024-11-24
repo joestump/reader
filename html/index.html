@@ -89,6 +89,38 @@
       line-height: 1.2;
       width: 350px;
     }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.9rem;
+      background: rgba(var(--background-rgb), 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+      opacity: 0.7;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .footer a:hover {
+      opacity: 1;
+    }
+
+    .footer i {
+      font-size: 1.2rem;
+    }
   {{/inline}}
 
   {{#*inline "content"}}
@@ -119,5 +151,14 @@
         </div>
       </div>
     </div>
+
+    <footer class="footer">
+      <a href="https://github.com/joestump/reader" target="_blank">
+        <i class="mdi mdi-github"></i>
+      </a>
+      <a href="/docs">
+        <i class="mdi mdi-api"></i>
+      </a>
+    </footer>
   {{/inline}}
 {{/base}}
