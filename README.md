@@ -80,16 +80,16 @@ Returns a parsed version of the article in JSON format.
 #### Example Request
 
 ```bash
-curl -s "http://localhost:8080/content.json?url=http://vimeo.com/8708708" | jq
+curl -s "http://localhost:8080/content.json?url=https://vimeo.com/1009918448" | jq
 ```
 
 #### Example Response
 
 ```yaml
 {
-  "title": "",
-  "content": "\n        <div class=\"video-author\"><a href=\"undefined\">undefined</a></div>\n        <div class=\"video-container\">\n          <iframe src=\"https://player.vimeo.com/video/8708708?app_id=122963\" width=\"640\" height=\"424\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write\"></iframe>\n        </div>\n        <div class=\"description\"></div>\n      ",
-  "markdown": "# undefined\n\nPosted by [undefined](undefined)\n\n[![undefined](undefined)](http://vimeo.com/8708708)",
+  "title": "Arc'teryx Presents: 109 Below",
+  "content": "\n        <div class=\"video-author\"><a href=\"https://vimeo.com/arcteryx\">Arc'teryx</a></div>\n        <div class=\"video-container\">\n          <iframe src=\"https://player.vimeo.com/video/1009918448?app_id=122963\" width=\"426\" height=\"240\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write\" title=\"Arc'teryx Presents: 109 Below\"></iframe>\n        </div>\n        <div class=\"description\">A tale of resilience, grit and elite rescue volunteers going out of their way to save the lives of strangers, 109 BELOW traces how an attempted rescue on Mount Washington in 1982 changed not only the course of two climbers’ lives - but also the lives of the rescuers who attempted to save them, and the future of prosthetics, forever.\n\nFeaturing: Joe Lentini, Hugh Herr, Alexa Siegel, Paul Cormier\nDirector: Nick Martini\nFilmed & Produced by: Stept Studios\nExecutive Producers: Ben Osborne, Lex Hinson, Sarah Stewart\n\nMore info: https://events.arcteryx.com/film-tour</div>\n      ",
+  "markdown": "# Arc'teryx Presents: 109 Below\n\nPosted by [Arc'teryx](https://vimeo.com/arcteryx)\n\n[![Arc'teryx Presents: 109 Below](https://i.vimeocdn.com/video/1927716396-1c91bd87b43b3e2188ec21ece46e6e877e6fee7792bd66ea40d4d38897d8c728-d_295x166)](https://vimeo.com/1009918448)\n\nA tale of resilience, grit and elite rescue volunteers going out of their way to save the lives of strangers, 109 BELOW traces how an attempted rescue on Mount Washington in 1982 changed not only the course of two climbers’ lives - but also the lives of the rescuers who attempted to save them, and the future of prosthetics, forever.\n\nFeaturing: Joe Lentini, Hugh Herr, Alexa Siegel, Paul Cormier\nDirector: Nick Martini\nFilmed & Produced by: Stept Studios\nExecutive Producers: Ben Osborne, Lex Hinson, Sarah Stewart\n\nMore info: https://events.arcteryx.com/film-tour",
   "domain": "vimeo.com",
   "root": "https://i.vimeocdn.com",
   "oembed_data": {
@@ -97,11 +97,23 @@ curl -s "http://localhost:8080/content.json?url=http://vimeo.com/8708708" | jq
     "version": "1.0",
     "provider_name": "Vimeo",
     "provider_url": "https://vimeo.com/",
-    "html": "<iframe src=\"https://player.vimeo.com/video/8708708?app_id=122963\" width=\"640\" height=\"424\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write\"></iframe>",
-    "width": 640,
-    "height": 424,
-    "video_id": 8708708,
-    "uri": "/videos/8708708"
+    "title": "Arc'teryx Presents: 109 Below",
+    "author_name": "Arc'teryx",
+    "author_url": "https://vimeo.com/arcteryx",
+    "is_plus": "0",
+    "account_type": "business",
+    "html": "<iframe src=\"https://player.vimeo.com/video/1009918448?app_id=122963\" width=\"426\" height=\"240\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write\" title=\"Arc'teryx Presents: 109 Below\"></iframe>",
+    "width": 426,
+    "height": 240,
+    "duration": 829,
+    "description": "A tale of resilience, grit and elite rescue volunteers going out of their way to save the lives of strangers, 109 BELOW traces how an attempted rescue on Mount Washington in 1982 changed not only the course of two climbers’ lives - but also the lives of the rescuers who attempted to save them, and the future of prosthetics, forever.\n\nFeaturing: Joe Lentini, Hugh Herr, Alexa Siegel, Paul Cormier\nDirector: Nick Martini\nFilmed & Produced by: Stept Studios\nExecutive Producers: Ben Osborne, Lex Hinson, Sarah Stewart\n\nMore info: https://events.arcteryx.com/film-tour",
+    "thumbnail_url": "https://i.vimeocdn.com/video/1927716396-1c91bd87b43b3e2188ec21ece46e6e877e6fee7792bd66ea40d4d38897d8c728-d_295x166",
+    "thumbnail_width": 295,
+    "thumbnail_height": 166,
+    "thumbnail_url_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F1927716396-1c91bd87b43b3e2188ec21ece46e6e877e6fee7792bd66ea40d4d38897d8c728-d_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png",
+    "upload_date": "2024-09-16 11:55:06",
+    "video_id": 1009918448,
+    "uri": "/videos/1009918448"
   }
 }
 ```
