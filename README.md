@@ -12,7 +12,7 @@ Reader is a simple self-hosted application that takes in a URL and converts it i
 - 🔌 API to programmatically access reader mode content
 - ☀️Light and 🌙Dark themes
 
-## 🐳 Using docker (recommended)
+## 🐳 Docker Compose
 
 ```yaml
 version: "3"
