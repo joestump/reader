@@ -83,6 +83,29 @@ Returns a parsed version of the article in JSON format.
 curl -s "http://localhost:8080/content.json?url=http://vimeo.com/8708708" | jq
 ```
 
+#### Example Response
+
+```yaml
+{
+  "title": "",
+  "content": "\n        <div class=\"video-author\"><a href=\"undefined\">undefined</a></div>\n        <div class=\"video-container\">\n          <iframe src=\"https://player.vimeo.com/video/8708708?app_id=122963\" width=\"640\" height=\"424\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write\"></iframe>\n        </div>\n        <div class=\"description\"></div>\n      ",
+  "markdown": "# undefined\n\nPosted by [undefined](undefined)\n\n[![undefined](undefined)](http://vimeo.com/8708708)",
+  "domain": "vimeo.com",
+  "root": "https://i.vimeocdn.com",
+  "oembed_data": {
+    "type": "video",
+    "version": "1.0",
+    "provider_name": "Vimeo",
+    "provider_url": "https://vimeo.com/",
+    "html": "<iframe src=\"https://player.vimeo.com/video/8708708?app_id=122963\" width=\"640\" height=\"424\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write\"></iframe>",
+    "width": 640,
+    "height": 424,
+    "video_id": 8708708,
+    "uri": "/videos/8708708"
+  }
+}
+```
+
 ## 🛠️ Development
 
 - `npm i`
