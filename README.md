@@ -15,12 +15,24 @@ Reader is a simple self-hosted application that takes in a URL and converts it i
 ## 🐳 Docker Compose
 
 ```yaml
-version: "3"
+---
 services:
   reader:
-    image: reader
+    image: ghcr.io/joestump/reader:latest
+    container_name: reader
+    environment:
+      - PORT=8080 # Port to run on
+      - HOST=0.0.0.0 # Address to listen on
+      - PROXY_IMAGES=true # Whether to proxy article images
     ports:
       - 8080:8080
+    healthcheck:
+      # Remember to update the healthcheck URL if you change the port
+      test: ["CMD", "wget", "--quiet", "-O", "/dev/null", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
 ```
 
 ## 🛠️ Development
