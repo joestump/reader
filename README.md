@@ -6,6 +6,8 @@ Reader is a simple self-hosted application that takes in a URL and converts it i
 
 ## ⭐️ Features
 
+- 🔗 Supports any URL
+- 😎 Easy on both human and LLM eyes
 - 🔖 Bookmarklet for one-click sanization
 - 🔌 API to programmatically access reader mode content
 - ☀️Light and 🌙Dark themes
