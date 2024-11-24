@@ -2,16 +2,25 @@
 
 Reader is a simple self-hosted application that takes in a URL and converts it into reader-mode friendly content using the [postlight parser](https://github.com/postlight/parser). Reader includes an API to programmatically access reader mode content and makes a great content proxy for local LLMs and SearXNG.
 
-![Reader Screenshot](docs/images/screenshot.png)
-
 ## ⭐️ Features
 
 - 🔗 Supports any URL
-- 🎥 oEmbed support for YouTube videos 
+- 🎥 Automatically convert some URLs to interactive embeds (YouTube, Vimeo, TikTok, etc.)
 - 😎 Easy on both human and LLM eyes
 - 🔖 Bookmarklet for one-click sanization
 - 🔌 API to programmatically access reader mode content
+- 🔌 Plugin framework for oEmbed providers
 - ☀️ Light and 🌙 Dark themes
+
+## 📸 Screenshots
+
+### Article View
+
+![Reader Screenshot](docs/images/screenshot.png)
+
+### Embed View
+
+![Reader Embed Screenshot](docs/images/automatic-embed.png)
 
 ## 🐳 Docker Compose
 
@@ -52,17 +61,16 @@ Returns a parsed version of the article in JSON format.
 
 #### Response Object
 
-| Field         | Type   | Description                                          |
-|--------------|--------|------------------------------------------------------|
-| `title`      | string | The article's title                                  |
-| `byline`     | string | The author or publication information                |
-| `content`    | string | The article's HTML content                           |
-| `markdown`   | string | The article's content converted to Markdown          |
-| `textContent`| string | The article's plain text content                     |
-| `length`     | number | The length of the article in characters              |
-| `excerpt`    | string | A brief excerpt from the article                     |
-| `siteName`   | string | The name of the website                              |
-| `language`   | string | The detected language of the article                 |
+| Field            | Type   | Description                                          |
+|-----------------|--------|------------------------------------------------------|
+| `title`         | string | The article's title                                  |
+| `content`       | string | The article's sanitized HTML content                 |
+| `markdown`      | string | The article's content in Markdown format             |
+| `domain`        | string | The website's domain without "www."                  |
+| `root`          | string | The website's root URL                               |
+| `date_published`| string | Publication date in readable format                  |
+| `favicon`       | string | Data URL for the generated favicon                   |
+| `oembed_data`   | object | Raw oEmbed data if available (YouTube, Vimeo, etc.) |
 
 #### Example Request
 

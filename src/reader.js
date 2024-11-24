@@ -23,6 +23,18 @@ Handlebars.registerHelper('isUrl', function(str) {
   }
 });
 
+Handlebars.registerHelper('strLength', function(str) {
+  return str.length;
+});
+
+Handlebars.registerHelper('gt', function(a, b) {
+  return a > b;
+});
+
+Handlebars.registerHelper('truncate', function(str, length) {
+  return str.substring(0, length);
+});
+
 const TEMPLATE = Handlebars.compile(
   fs.readFileSync("html/template.html").toString()
 );

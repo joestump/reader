@@ -265,7 +265,13 @@
               <td>{{@key}}</td>
               <td>
                 {{#if (isUrl this)}}
-                  <a href="{{this}}" target="_blank">{{this}}</a>
+                  <a href="{{this}}" target="_blank">
+                    {{#if (gt (strLength this) 60)}}
+                      {{truncate this 60}}...
+                    {{else}}
+                      {{this}}
+                    {{/if}}
+                  </a>
                 {{else}}
                   {{this}}
                 {{/if}}

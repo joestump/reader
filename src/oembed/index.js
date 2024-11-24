@@ -177,7 +177,10 @@ ${data.description || ''}
       content: `
         <div class="flickr-photo">
           <img src="${data.url}" alt="${data.title}" />
-          <div class="photo-credit">Photo by <a href="${data.author_url}">${data.author_name}</a></div>
+          <div class="photo-credit">
+            Photo by <a href="${data.author_url}">${data.author_name}</a>
+            ${data.license ? ` (${data.license} ©)` : ''}
+          </div>
         </div>
       `,
       markdown: `
@@ -185,7 +188,7 @@ ${data.description || ''}
 
 ![${data.title}](${data.url})
 
-Photo by [${data.author_name}](${data.author_url})
+Photo by [${data.author_name}](${data.author_url})${data.license ? ` (${data.license} ©)` : ''}
       `.trim()
     })
   );
