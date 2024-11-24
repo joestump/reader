@@ -17,6 +17,11 @@ const INDEX_TEMPLATE = Handlebars.compile(fs.readFileSync("html/index.html").toS
 const baseTemplate = fs.readFileSync("html/base.html").toString();
 Handlebars.registerPartial("base", baseTemplate);
 
+// Add this near the top with other Handlebars setup
+Handlebars.registerHelper('json', function(context) {
+  return JSON.stringify(context, null, 2);
+});
+
 fastify.get("/", async (request, reply) => {
   const {url} = request.query;
 

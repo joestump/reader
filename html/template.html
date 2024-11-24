@@ -52,6 +52,22 @@
 
     article {
       margin-top: 0.1rem;
+      min-height: 500px;
+      position: relative;
+      width: 100%;
+      display: block;
+      padding: 2em;
+    }
+
+    article > p:first-of-type {
+      margin-top: 2em;
+    }
+
+    article blockquote {
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: none;
     }
 
     blockquote {
@@ -76,8 +92,10 @@
       position: relative;
       padding-bottom: 56.25%; /* 16:9 aspect ratio */
       height: 0;
-      overflow: hidden;
-      max-width: 100%;
+      overflow: visible;
+      width: 100%;
+      margin: 1em 0 2em;
+      background: transparent !important; /* Force transparent background */
     }
 
     .video-container iframe {
@@ -86,6 +104,7 @@
       left: 0;
       width: 100%;
       height: 100%;
+      background: transparent !important; /* Force transparent background */
     }
 
     .video-author {
@@ -94,6 +113,117 @@
 
     .description {
       margin-top: 1em;
+    }
+
+    .twitter-tweet {
+      display: block !important;
+      visibility: visible !important;
+      position: relative !important;
+      min-height: 500px !important;
+      max-width: 550px !important;
+      margin: 0 auto !important;
+    }
+
+    .twitter-tweet iframe {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      visibility: visible !important;
+      display: block !important;
+    }
+
+    [data-theme="dark"] .video-container,
+    [data-theme="dark"] .video-container iframe {
+      background: transparent !important;
+      border: none !important;
+    }
+
+    /* New styles for oEmbed footer */
+    .oembed-footer {
+      margin-top: 2em;
+      border-top: 1px solid var(--primary);
+      padding-top: 1em;
+    }
+
+    .oembed-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      cursor: pointer;
+      color: var(--primary);
+      background: none;
+      border: none;
+      padding: 0.5em;
+      font-size: 1em;
+    }
+
+    .oembed-toggle i {
+      transition: transform 0.2s ease;
+    }
+
+    .oembed-toggle[aria-expanded="true"] i {
+      transform: rotate(180deg);
+    }
+
+    .oembed-content {
+      display: none;
+      margin-top: 1em;
+    }
+
+    .oembed-content[aria-hidden="false"] {
+      display: block;
+    }
+
+    .oembed-table {
+      width: 100%;
+      margin-bottom: 1em;
+    }
+
+    .oembed-table td {
+      padding: 0.5em;
+      border-bottom: 1px solid var(--muted);
+    }
+
+    .oembed-table td:first-child {
+      font-weight: bold;
+      width: 30%;
+    }
+
+    .tiktok-embed {
+      display: flex;
+      justify-content: center;
+      background: transparent !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .tiktok-embed blockquote,
+    .tiktok-embed iframe,
+    .tiktok-embed > div,
+    .tiktok-embed section {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      background: transparent !important;
+    }
+
+    article .tiktok-embed {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 325px;
+    }
+
+    .tiktok-embed * {
+      background: transparent !important;
+    }
+
+    .tiktok-embed blockquote {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      margin-left: calc(-50vw + 50%) !important;
+      margin-right: calc(-50vw + 50%) !important;
     }
   {{/inline}}
 
@@ -120,6 +250,34 @@
       {{{content}}}
     </article>
 
+    {{#if oembed_data}}
+    <footer class="oembed-footer">
+      <button class="oembed-toggle" aria-expanded="false" aria-controls="oembed-content">
+        <i class="mdi mdi-chevron-down"></i>
+        oEmbed Data Discovered
+      </button>
+      
+      <div id="oembed-content" class="oembed-content" aria-hidden="true">
+        <table class="oembed-table">
+          <tbody>
+            {{#each oembed_data}}
+            <tr>
+              <td>{{@key}}</td>
+              <td>
+                {{#if (isUrl this)}}
+                  <a href="{{this}}" target="_blank">{{this}}</a>
+                {{else}}
+                  {{this}}
+                {{/if}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </footer>
+    {{/if}}
+
     <script>
       // Favicon fallback
       const img = document.querySelector("#fav");
@@ -128,6 +286,17 @@
           .querySelector('link[rel="shortcut icon"]')
           .getAttribute("href");
       });
+
+      // oEmbed toggle functionality
+      const toggle = document.querySelector('.oembed-toggle');
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          const expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', !expanded);
+          const content = document.getElementById('oembed-content');
+          content.setAttribute('aria-hidden', expanded);
+        });
+      }
     </script>
   {{/inline}}
 {{/base}}

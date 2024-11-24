@@ -10,6 +10,18 @@ import Parser from "@postlight/parser";
 
 import {PROXY_IMAGES} from "./constants.js";
 import {getFavicon} from "./generate-favicon.js";
+import { providers } from './oembed/index.js';
+
+// Add helper before template compilation
+Handlebars.registerHelper('isUrl', function(str) {
+  if (typeof str !== 'string') return false;
+  try {
+    new URL(str);
+    return true;
+  } catch {
+    return false;
+  }
+});
 
 const TEMPLATE = Handlebars.compile(
   fs.readFileSync("html/template.html").toString()
@@ -19,16 +31,24 @@ const DOMPurify = createDOMPurify(window);
 DOMPurify.setConfig({
   ADD_TAGS: ['iframe'],
   ADD_ATTR: ['allowfullscreen', 'frameborder', 'src'],
-  ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|xxx):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+  ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
 });
 
 export async function convertUrlToReader(url) {
-  const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
-  
-  if (videoId) {
-    return convertYouTubeToReader(url, videoId);
+  // Try oEmbed providers first
+  for (const provider of providers) {
+    if (provider.matches(url)) {
+      try {
+        const result = await provider.fetch(url);
+        return result;
+      } catch (error) {
+        console.warn(`oEmbed failed for ${url}, falling back to parser:`, error);
+        break;
+      }
+    }
   }
 
+  // Fall back to regular parser
   const res = await Parser.parse(url, {
     contentType: "markdown"
   });
@@ -39,9 +59,13 @@ export async function convertUrlToReader(url) {
         renderer: {
           image(attrs) {
             try {
-              const imageUrl = new URL(attrs.href);                
+              const imageUrl = new URL(attrs.href);
+              const src = attrs.href.startsWith('data:') 
+                ? attrs.href 
+                : `/__/proxy?href=${encodeURIComponent(imageUrl)}`;
+                
               return `<img
-                      src="/__/proxy?href=${encodeURIComponent(imageUrl)}"
+                      src="${src}"
                       alt="${attrs.text}"${attrs.title ? `\ntitle="${attrs.title}"` : ""}
                   />`;
             } catch (error) {
@@ -64,62 +88,11 @@ export async function convertUrlToReader(url) {
       : "",
     ctx: JSON.stringify(res),
     favicon: getFavicon(domain),
+    // No oembed_data for parser fallback
   };
 }
 
 export async function generateReaderView(url) {
   const context = await convertUrlToReader(url);
   return TEMPLATE(context);
-}
-
-async function convertYouTubeToReader(url, videoId) {
-  const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
-  const response = await fetch(oembedUrl);
-  const data = await response.json();
-
-  const content = `
-    <div class="video-author">
-      <a href="${data.author_url}">${data.author_name}</a>
-    </div>
-    <div class="video-container">
-      <iframe 
-        width="420" 
-        height="315" 
-        src="https://www.youtube.com/embed/${videoId}?autoplay=0" 
-        frameborder="0" 
-        allowfullscreen>
-      </iframe>
-    </div>
-    <div class="description">
-      ${data.description || ''}
-    </div>
-  `;
-
-  // Updated markdown with clickable thumbnail
-  const markdown = `
-# ${data.title}
-
-Posted by [${data.author_name}](${data.author_url})
-
-[![${data.title}](http://img.youtube.com/vi/${videoId}/0.jpg)](http://www.youtube.com/watch?v=${videoId} "${data.title}")
-
-${data.description || ''}
-  `.trim();
-
-  return {
-    title: data.title,
-    content: DOMPurify.sanitize(content),
-    markdown,
-    textContent: `${data.title} - ${data.author_name}`,
-    length: content.length,
-    excerpt: data.title,
-    siteName: 'YouTube',
-    domain: 'youtube.com',
-    root: 'https://youtube.com',
-    favicon: 'https://www.youtube.com/favicon.ico',
-    date_published: '',
-    byline: data.author_name,
-    author: data.author_name,
-    author_url: data.author_url
-  };
 }
