@@ -12,6 +12,11 @@ Reader is a simple self-hosted application that takes in a URL and converts it i
 - 🔌 Plugin framework for oEmbed providers
 - ☀️ Light and 🌙 Dark themes
 
+## Coming Soon
+
+- 🔍 SearXNG plugin that redirects search results to Reader.
+- 📰 FreshRSS plugin that converts feed item bodies with reader mode versions of the items' URLs.
+
 ## 📸 Screenshots
 
 ### Article View
