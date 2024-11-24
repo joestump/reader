@@ -57,7 +57,12 @@ const contentSchema = {
       type: 'object',
       required: ['url'],
       properties: {
-        url: { type: 'string', format: 'uri', description: 'URL to convert' }
+        url: { 
+          type: 'string', 
+          format: 'uri', 
+          description: 'URL to convert',
+          examples: ['http://vimeo.com/8708708']
+        }
       }
     },
     response: {
