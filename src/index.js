@@ -13,6 +13,10 @@ import {PORT, HOST} from "./constants.js";
 const fastify = Fastify({logger: true});
 const INDEX_TEMPLATE = Handlebars.compile(fs.readFileSync("html/index.html").toString());
 
+// Register the base template
+const baseTemplate = fs.readFileSync("html/base.html").toString();
+Handlebars.registerPartial("base", baseTemplate);
+
 fastify.get("/", async (request, reply) => {
   const {url} = request.query;
 

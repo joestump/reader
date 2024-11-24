@@ -1,140 +1,123 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reader</title>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1/css/pico.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
-    <style>
-      :root {
-        --primary: #9b4dca;
-        --primary-hover: #842eb2;
-        --primary-focus: rgba(155, 77, 202, 0.125);
-        --background-color: #1a1b26;
-        --color: #a9b1d6;
-      }
+{{#> base title="Reader"}}
+  {{#*inline "styles"}}
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
 
-      body {
-        min-height: 100vh;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+    .url-form {
+      width: 100%;
+      max-width: 800px;
+    }
 
-      .url-form {
-        width: 100%;
-        max-width: 800px;
-        padding: 2rem;
-      }
+    .input-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+    }
 
-      .input-group {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 1rem;
-        align-items: center;
-      }
+    input[type="text"] {
+      border-radius: 2rem;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--primary);
+    }
 
-      input[type="text"] {
-        border-radius: 2rem;
-        padding: 1rem 1.5rem;
-        font-size: 1.1rem;
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid var(--primary);
-      }
+    button {
+      border-radius: 2rem;
+      padding: 1rem 2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: var(--primary);
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-      button {
-        border-radius: 2rem;
-        padding: 1rem 2rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        background: var(--primary);
-        border: none;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
+    button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      transition: all 0.2s ease;
+    }
 
-      button:hover {
-        background: var(--primary-hover);
-        transform: translateY(-1px);
-        transition: all 0.2s ease;
-      }
+    .bookmarklet-container {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
-      .mdi {
-        font-size: 1.2rem;
-      }
+    .bookmarklet {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(var(--primary-rgb), 0.15);
+      color: var(--primary);
+      text-decoration: none;
+      border-radius: 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: move;
+      transition: all 0.2s ease;
+    }
 
-      .bookmarklet-container {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
+    .bookmarklet:hover {
+      background: rgba(var(--primary-rgb), 0.25);
+      transform: translateY(-1px);
+    }
 
-      .bookmarklet {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background: rgba(155, 77, 202, 0.15);
-        color: #9b8cb0;
-        text-decoration: none;
-        border-radius: 1.5rem;
-        font-size: 0.85rem;
-        font-weight: 500;
-        cursor: move;
-        transition: all 0.2s ease;
-      }
+    .bookmarklet i {
+      font-size: 1rem;
+    }
 
-      .bookmarklet:hover {
-        background: rgba(155, 77, 202, 0.25);
-        transform: translateY(-1px);
-      }
+    .bookmarklet-description {
+      font-size: 0.7rem;
+      color: var(--primary);
+      opacity: 0.8;
+      line-height: 1.2;
+      width: 200px;
+    }
+  {{/inline}}
 
-      .bookmarklet i {
-        font-size: 1rem;
-      }
+  {{#*inline "content"}}
+    <div class="container">
+      <form action="/" method="get" class="url-form">
+        <div class="input-group">
+          <input 
+            name="url" 
+            type="text" 
+            placeholder="URL to sanitize..." 
+            required
+            aria-label="This URL to sanitize ..."
+          >
+          <button type="submit">
+            <i class="mdi mdi-spray-bottle"></i>
+            Sanitize
+          </button>
+        </div>
+      </form>
 
-      .bookmarklet-description {
-        font-size: 0.7rem;
-        color: #9b8cb0;
-        opacity: 0.7;
-        line-height: 1.2;
-        width: 300px;
-        text-align: left;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="bookmarklet-container">
-      <a class="bookmarklet" href="javascript:(function(){window.location='{{baseUrl}}/?url='+encodeURIComponent(window.location.href)})();">
-        Sanitize
-        <i class="mdi mdi-bookmark-plus"></i>
-      </a>
-      <div class="bookmarklet-description">
-        ↑ Drag this bookmarklet to your bookmarks bar to sanitize any URL with one click
+      <div class="bookmarklet-container">
+        <a class="bookmarklet" href="javascript:(function(){window.location='{{baseUrl}}/?url='+encodeURIComponent(window.location.href)})();">
+          Sanitize
+          <i class="mdi mdi-bookmark-plus"></i>
+        </a>
+        <div class="bookmarklet-description">
+          ↑ Drag this to your bookmarks bar to for one-click sanitization
+        </div>
       </div>
     </div>
-
-    <form action="/" method="get" class="url-form">
-      <div class="input-group">
-        <input 
-          name="url" 
-          type="text" 
-          placeholder="URL to sanitize..." 
-          required
-          aria-label="This URL to sanitize ..."
-        >
-        <button type="submit">
-          <i class="mdi mdi-spray-bottle"></i>
-          Sanitize
-        </button>
-      </div>
-    </form>
-  </body>
-</html>
+  {{/inline}}
+{{/base}}

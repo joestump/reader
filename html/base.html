@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    {{#if favicon}}
+    <link rel="shortcut icon" href="{{favicon}}" type="image/x-icon" />
+    {{/if}}
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Spectral:wght@600&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #9b4dca;
+        --primary-rgb: 155, 77, 202;
+        --primary-hover: #842eb2;
+        --primary-focus: rgba(155, 77, 202, 0.125);
+        --background-color: #1a1b26;
+        --color: #a9b1d6;
+        --card-background-color: #242222;
+        --card-border-color: #2d2929;
+      }
+
+      [data-theme="light"] {
+        --primary: #d35400 !important;
+        --primary-rgb: 211, 84, 0 !important;
+        --primary-hover: #e67e22 !important;
+        --primary-focus: rgba(211, 84, 0, 0.125) !important;
+        --background-color: #fdf6e3 !important;
+        --color: #433422 !important;
+        --card-background-color: #fff5e6 !important;
+        --card-border-color: #eee3d0 !important;
+      }
+
+      /* Force background color */
+      [data-theme="light"] body {
+        background-color: var(--background-color) !important;
+        color: var(--color) !important;
+      }
+
+      /* Force article text color in light mode */
+      [data-theme="light"] article {
+        color: #000000 !important;
+      }
+
+      body {
+        font-family: "Crimson Pro", Georgia, serif;
+        line-height: 1.7;
+        margin: 0;
+        min-height: 100vh;
+      }
+
+      /* Shared button styles for theme toggle and back button */
+      .theme-toggle,
+      .back-button {
+        position: fixed;
+        top: 1rem;
+        background: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: 2rem;
+        padding: 0.5rem 1rem;
+        width: auto;
+        min-width: unset;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.2rem;
+        color: var(--color);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .theme-toggle {
+        right: 1rem;
+      }
+
+      .back-button {
+        left: 1rem;
+      }
+
+      /* Light mode hover */
+      [data-theme="light"] .theme-toggle:hover,
+      [data-theme="light"] .back-button:hover {
+        background: rgba(var(--primary-rgb), 0.05);
+        transform: translateY(-1px);
+      }
+
+      /* Dark mode hover */
+      [data-theme="dark"] .theme-toggle:hover,
+      [data-theme="dark"] .back-button:hover {
+        background: rgba(155, 77, 202, 0.20);
+        transform: translateY(-1px);
+      }
+
+      .theme-toggle i,
+      .back-button i {
+        color: var(--primary);
+      }
+
+      {{> styles}}
+    </style>
+  </head>
+  <body>
+    <button class="theme-toggle" aria-label="Toggle theme">
+      <i class="mdi mdi-weather-sunny" data-light-icon></i>
+      <i class="mdi mdi-weather-night" data-dark-icon style="display: none;"></i>
+    </button>
+
+    {{> content}}
+
+    <script>
+      (function () {
+        const html = document.documentElement;
+        const themeToggle = document.querySelector('.theme-toggle');
+        const lightIcon = document.querySelector('[data-light-icon]');
+        const darkIcon = document.querySelector('[data-dark-icon]');
+
+        function updateTheme(isDark) {
+          html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+          lightIcon.style.display = isDark ? 'none' : 'block';
+          darkIcon.style.display = isDark ? 'block' : 'none';
+          // Save preference to localStorage
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Load saved preference on page load
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+          updateTheme(savedTheme === 'dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+          const isDark = html.getAttribute('data-theme') === 'dark';
+          updateTheme(!isDark);
+        });
+      })();
+    </script>
+    {{#if ctx}}
+    <script type="context-json">
+      {{{ctx}}}
+    </script>
+    {{/if}}
+  </body>
+</html> 
