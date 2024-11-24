@@ -231,11 +231,92 @@ ${data.description || ''}
     }
   );
   
+  const imgurProvider = new OEmbedProvider(
+    'imgur.com',
+    'https://api.imgur.com/oembed.json',
+    (data, url) => ({
+      ...createBaseResult(data, url),
+      content: `
+        <div class="imgur-embed">
+          ${data.html}
+        </div>
+      `,
+      markdown: `
+# ${data.title || 'Imgur Image'}
+
+![${data.title || 'Imgur Image'}](${data.url})
+
+${data.description || ''}
+      `.trim()
+    })
+  );
+  
+  const gistProvider = new OEmbedProvider(
+    'gist.github.com',
+    null,
+    async (data, url) => {
+      // Fetch gist metadata
+      try {
+        const response = await fetch(`${url}.json`);
+        const gistData = await response.json();
+        
+        return {
+          ...createBaseResult({
+            provider_name: 'GitHub',
+            title: gistData.description || 'GitHub Gist',
+            author_name: gistData.owner,
+            author_url: `https://github.com/${gistData.owner}`
+          }, url),
+          root: 'https://github.com',
+          domain: 'github.com',
+          content: `
+            <div class="gist-embed">
+              <script src="${url}.js"></script>
+            </div>
+          `,
+          markdown: `
+[View Gist on GitHub](${url})
+          `.trim(),
+          oembed_data: {
+            type: 'rich',
+            provider_name: 'GitHub',
+            provider_url: 'https://github.com',
+            title: gistData.description || 'GitHub Gist',
+            author_name: gistData.owner,
+            created_at: gistData.created_at,
+            files: Object.keys(gistData.files),
+            public: gistData.public,
+            stylesheet: gistData.stylesheet
+          }
+        };
+      } catch (error) {
+        console.error('Failed to fetch Gist metadata:', error);
+        // Fall back to basic embed if metadata fetch fails
+        return {
+          ...createBaseResult({
+            provider_name: 'GitHub',
+            title: 'GitHub Gist'
+          }, url),
+          root: 'https://github.com',
+          domain: 'github.com',
+          content: `
+            <div class="gist-embed">
+              <script src="${url}.js"></script>
+            </div>
+          `,
+          markdown: `[View Gist on GitHub](${url})`.trim()
+        };
+      }
+    }
+  );
+  
   export const providers = [
     youtubeProvider,
     vimeoProvider,
     tiktokProvider,
     soundcloudProvider,
     spotifyProvider,
-    flickrProvider
+    flickrProvider,
+    imgurProvider,
+    gistProvider
   ];
