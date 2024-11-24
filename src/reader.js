@@ -1,15 +1,15 @@
 import createDOMPurify from "dompurify";
 import Handlebars from "handlebars";
-import {JSDOM} from "jsdom";
-import {marked} from "marked";
+import { JSDOM } from "jsdom";
+import { marked } from "marked";
 import fs from "node:fs";
 import { URL } from "node:url";
 import https from 'node:https';
 
 import Parser from "@postlight/parser";
 
-import {PROXY_IMAGES} from "./constants.js";
-import {getFavicon} from "./generate-favicon.js";
+import { PROXY_IMAGES } from "./constants.js";
+import { getFavicon } from "./generate-favicon.js";
 import { providers } from './oembed/index.js';
 
 // Add helper before template compilation
@@ -33,6 +33,10 @@ Handlebars.registerHelper('gt', function(a, b) {
 
 Handlebars.registerHelper('truncate', function(str, length) {
   return str.substring(0, length);
+});
+
+Handlebars.registerHelper('isArray', function(value) {
+  return Array.isArray(value);
 });
 
 const TEMPLATE = Handlebars.compile(
@@ -92,6 +96,7 @@ export async function convertUrlToReader(url) {
   return {
     ...res,
     domain,
+    url,
     root: `https://${res.domain}`,
     content: DOMPurify.sanitize(md.parse(res.content)),
     markdown: res.content,

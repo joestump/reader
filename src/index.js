@@ -74,6 +74,7 @@ const contentSchema = {
           markdown: { type: 'string' },
           domain: { type: 'string' },
           root: { type: 'string' },
+          url: { type: 'string' },
           date_published: { type: 'string' },
           favicon: { type: 'string' },
           oembed_data: { 

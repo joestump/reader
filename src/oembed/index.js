@@ -284,7 +284,7 @@ ${data.description || ''}
             title: gistData.description || 'GitHub Gist',
             author_name: gistData.owner,
             created_at: gistData.created_at,
-            files: Object.keys(gistData.files),
+            files: gistData.files,
             public: gistData.public,
             stylesheet: gistData.stylesheet
           }
