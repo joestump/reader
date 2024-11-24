@@ -20,7 +20,7 @@ Reader is a simple self-hosted application that takes in a URL and converts it i
 
 ### Embed View
 
-![Reader Embed Screenshot](docs/images/automatic-embed.png)
+![Reader Embed Screenshot](docs/images/automatic-oembed.png)
 
 ## 🐳 Docker Compose
 
